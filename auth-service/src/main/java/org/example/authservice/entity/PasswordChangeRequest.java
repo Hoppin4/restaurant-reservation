@@ -1,0 +1,31 @@
+package org.example.authservice.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+@Entity
+@Table(name = "t_password_change_requests")
+@Getter
+@Setter
+public class PasswordChangeRequest {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Column(nullable = false, unique = true)
+    private String token;
+
+    private String newPassword;
+
+    @Column(nullable = false)
+    private LocalDateTime expiresAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+}
