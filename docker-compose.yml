@@ -11,6 +11,16 @@ services:
       - redis
       - kafka
 
+  office-service:
+    build:
+      context: ./office-service
+    container_name: office-service
+    ports:
+      - "8082:8080"
+    depends_on:
+      - auth-postgres
+      - kafka
+
   api-gateway:
     build:
       context: ./api-gateway
@@ -33,6 +43,18 @@ services:
       - "5433:5432"
     volumes:
       - auth_data:/var/lib/postgresql/data
+
+  office-postgres:
+    image: postgres:17
+    container_name: office-postgres
+    environment:
+      POSTGRES_DB: office_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - office_data:/var/lib/postgresql/data
 
   redis:
     image: redis:7
